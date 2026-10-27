@@ -1,32 +1,50 @@
 schema: spec-driven
 
-# Project context (optional)
-# Add only constraints that should guide OpenSpec artifacts and workflows.
-# Include constraints an agent cannot infer by reading the code.
-# Keep general project documentation and discoverable codebase facts out.
-# Example:
-#   context: |
-#     Designs and tasks must cover Windows, macOS, and Linux
-#     Write all artifacts in Spanish
+# Project context
+# Constraints an agent cannot infer from the code. Product background is in MANIFEST.md.
+context: |
+  Pensieve is a personal learning companion over YouTube (hobby project, one user first,
+  friends later). Read MANIFEST.md for the problem, principles, vocabulary and roadmap.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always state what is out of scope
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Stack: ASP.NET Core minimal APIs (.NET 10), SQLite via EF Core, Svelte 5 + Vite + TypeScript,
+  PWA first. The API serves the built frontend. Native apps may come later, so keep logic in
+  the API and keep records syncable.
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+  Product constraints:
+  - Store references to videos, never copies. Play only through the official YouTube IFrame
+    Player API. Never download or re-host YouTube content.
+  - Phone first. The gym is a main place of use.
+  - Private by default: every record is owned by a user. No ads, tracking or recommendations.
+  - IDs are ULIDs or UUIDs. Every synced record has updatedAt, and the newest save wins.
+  - Some videos block embedding. The app must handle that case without breaking.
+
+  Use this vocabulary exactly, in specs, API routes and code: Item, Progress, Bookmark,
+  Moment, Reel, Plan, Portkey, Note, Link. Do not introduce synonyms such as clip, segment
+  or watch position.
+
+  The current focus is Milestone 1 (library and resume). Do not spec later milestones yet.
+
+# Per-artifact rules
+rules:
+  proposal:
+    - Name the MANIFEST.md milestone and slice the change belongs to
+    - Keep proposals under 300 words
+    - Always state what is out of scope
+  specs:
+    - Write each requirement as observable behaviour with at least one scenario
+    - Cover the failure cases (video cannot be embedded, offline, two devices saving)
+  design:
+    - Only add a design when there is a real decision to record, and keep it short
+  tasks:
+    - Break tasks into chunks of at most 2 hours
+    - Every task group ends with a way to run or test it
+
+# Per-operation guidance
+operations:
+  apply:
+    guidance:
+      - Run dotnet test and npm run check before marking tasks complete
+      - Keep test summaries concise
+  archive:
+    guidance:
+      - Summarize the archive outcome before finishing
